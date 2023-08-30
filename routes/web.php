@@ -33,6 +33,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Role
     Route::resource('/roles', RoleController::class);
+
+    // Setting
+    Route::get('/settings', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('setting.update');
+
 });
 
 Route::middleware('auth')->group(function () {
