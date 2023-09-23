@@ -1,13 +1,7 @@
 version: "3.7"
 services:
   app:
-      build:
-        args:
-          user: aji
-          uid: 1000
-        context: ./
-        dockerfile: ./Dockerfile
-      image: template
+      image: ajikamaludin/php82user:latest
       container_name: template-app
       working_dir: /var/www/
       volumes:
@@ -51,7 +45,7 @@ services:
     cpus: 0.5
     networks:
       template:
-        ipv4_address: 10.8.0.99
+        ipv4_address: 10.255.255.99
   postgresql:
     # image: postgres:latest
     image: postgres:14-alpine3.17
@@ -71,7 +65,7 @@ services:
     cpus: 0.5
     networks:
       template:
-        ipv4_address: 10.8.0.96
+        ipv4_address: 10.255.255.96
   redis:
     image: redis
     container_name: template-redis
@@ -82,18 +76,21 @@ services:
     cpus: 0.5
     networks:
       - template
-  nodejs:
-    image: node:16-alpine
-    container_name: template-node
+
+  build:
+    # image: node:18-alpine
+    image: oven/bun
+    container_name: template-build
     ports:
       - 5173:5173
     volumes:
       - ./:/var/www
     working_dir: /var/www
-    entrypoint: ["npm","run", "dev"]
-    mem_limit: 512m
+    # entrypoint: ["npm","run", "dev"]
+    entrypoint: ["bun","run", "dev"]
+    mem_limit: 1024m
     mem_reservation: 128M
-    cpus: 0.5
+    cpus: 1
     networks:
       - template
 
@@ -109,5 +106,5 @@ networks:
     ipam:
       driver: default
       config:
-          - subnet: 10.18.10.0/24
-            gateway: 10.18.10.1
+          - subnet: 10.255.255.0/24
+            gateway: 10.255.255.1
