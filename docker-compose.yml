@@ -78,16 +78,16 @@ services:
       - template
 
   build:
-    # image: node:18-alpine
-    image: oven/bun
+    image: node:18-alpine
+    # image: oven/bun
     container_name: template-build
     ports:
       - 5173:5173
     volumes:
       - ./:/var/www
     working_dir: /var/www
-    # entrypoint: ["npm","run", "dev"]
-    entrypoint: ["bun","run", "dev"]
+    entrypoint: ["npm","run", "dev"]
+    # entrypoint: ["bun","run", "dev"]
     mem_limit: 1024m
     mem_reservation: 128M
     cpus: 1
