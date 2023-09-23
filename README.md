@@ -65,4 +65,4 @@ npm run build
 
 ## TODO
 
--   [ ] add dark mode if needed
+-   [ ] add dark mode
