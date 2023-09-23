@@ -57,7 +57,12 @@ password : password
 npm run build
 ```
 
+## Screen Capture
+
+![](screenshot1.gif?raw=true)
+
+<hr/>
+
 ## TODO
 
 -   [ ] add dark mode
--   [ ] add default setting (app name)
