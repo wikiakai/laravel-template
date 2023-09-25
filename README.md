@@ -66,3 +66,4 @@ npm run build
 ## TODO
 
 -   [ ] add dark mode
+-   [ ] add permission command
