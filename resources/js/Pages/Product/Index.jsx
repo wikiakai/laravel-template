@@ -12,56 +12,27 @@ import ModalConfirm from "@/Components/ModalConfirm";
 import SearchInput from "@/Components/SearchInput";
 import HasPermission from "@/Components/HasPermission";
 
-export default function Index(props) {
+function Index(props) {
     const {
         data: { links, data },
     } = props;
 
     const [search, setSearch] = useState("");
-    const preValue = usePrevious(search);
-
-    const confirmModal = useModalState();
-
-    const handleDeleteClick = (product) => {
-        confirmModal.setData(product);
-        confirmModal.toggle();
-    };
-
-    const onDelete = () => {
-        if (confirmModal.data !== null) {
-            router.delete(route("roles.destroy", confirmModal.data.id));
-        }
-    };
-
-    const params = { q: search };
-    useEffect(() => {
-        if (preValue) {
-            router.get(
-                route(route().current()),
-                { q: search },
-                {
-                    replace: true,
-                    preserveState: true,
-                }
-            );
-        }
-    }, [search]);
 
     return (
         <AuthenticatedLayout
             auth={props.auth}
             flash={props.flash}
             page={"System"}
-            action={"Role"}
+            action={"Product"}
         >
-            <Head title="Role" />
-
+            <Head title="Product" />
             <div>
                 <div className="mx-auto sm:px-6 lg:px-8 ">
                     <div className="p-6 overflow-hidden shadow-sm sm:rounded-lg bg-gray-200 dark:bg-gray-800 space-y-4">
                         <div className="flex justify-between">
                             <HasPermission p="create-role">
-                                <Link href={route("roles.create")}>
+                                <Link href={route("product.create")}>
                                     <Button size="sm">Tambah</Button>
                                 </Link>
                             </HasPermission>
@@ -82,7 +53,19 @@ export default function Index(props) {
                                                 scope="col"
                                                 className="py-3 px-6"
                                             >
-                                                Nama
+                                                Name
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="py-3 px-6"
+                                            >
+                                                Qty
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="py-3 px-6"
+                                            >
+                                                Price
                                             </th>
                                             <th
                                                 scope="col"
@@ -91,16 +74,28 @@ export default function Index(props) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.map((role) => (
+                                        {data.map((product) => (
                                             <tr
                                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                key={role.id}
+                                                key={product.id}
                                             >
                                                 <td
                                                     scope="row"
                                                     className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                 >
-                                                    {role.name}
+                                                    {product.name}
+                                                </td>
+                                                <td
+                                                    scope="row"
+                                                    className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                >
+                                                    {product.qty}
+                                                </td>
+                                                <td
+                                                    scope="row"
+                                                    className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                >
+                                                    {product.price}
                                                 </td>
                                                 <td className="py-4 px-6 flex justify-end">
                                                     <Dropdown
@@ -114,8 +109,27 @@ export default function Index(props) {
                                                                 onClick={() =>
                                                                     router.visit(
                                                                         route(
-                                                                            "roles.edit",
-                                                                            role
+                                                                            "product.show",
+                                                                            product.id
+                                                                        )
+                                                                    )
+                                                                }
+                                                            >
+                                                                <div className="flex space-x-1 items-center">
+                                                                    <HiPencil />
+                                                                    <div>
+                                                                        Detail
+                                                                    </div>
+                                                                </div>
+                                                            </Dropdown.Item>
+                                                        </HasPermission>
+                                                        <HasPermission p="update-role">
+                                                            <Dropdown.Item
+                                                                onClick={() =>
+                                                                    router.visit(
+                                                                        route(
+                                                                            "product.edit",
+                                                                            product.id
                                                                         )
                                                                     )
                                                                 }
@@ -151,14 +165,15 @@ export default function Index(props) {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className="w-full flex items-center justify-center">
+                            {/* <div className="w-full flex items-center justify-center">
                                 <Pagination links={links} params={params} />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
             </div>
-            <ModalConfirm modalState={confirmModal} onConfirm={onDelete} />
         </AuthenticatedLayout>
     );
 }
+
+export default Index;

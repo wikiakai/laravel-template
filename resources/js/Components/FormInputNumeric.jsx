@@ -9,6 +9,7 @@ export default function FormInputNumeric({
     label,
     className,
     error,
+    disabled
 }) {
     return (
         <div className={className}>
@@ -19,6 +20,7 @@ export default function FormInputNumeric({
                 {label}
             </label>
             <NumericFormat
+                disabled={disabled}
                 thousandSeparator=","
                 decimalSeparator="."
                 allowNegative={false}

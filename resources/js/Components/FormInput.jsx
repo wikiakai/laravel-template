@@ -1,5 +1,5 @@
-import React from 'react'
-import Input from './Input'
+import React from "react";
+import Input from "./Input";
 
 export default function FormInput({
     type,
@@ -15,7 +15,7 @@ export default function FormInput({
     disabled,
     readOnly,
 }) {
-    const id = `${name}-${label}`
+    const id = `${name}-${label}`;
     return (
         <div className={className}>
             <label
@@ -38,5 +38,5 @@ export default function FormInput({
                 readOnly={readOnly}
             />
         </div>
-    )
+    );
 }

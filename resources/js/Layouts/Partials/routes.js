@@ -54,6 +54,15 @@ export default [
         ],
     },
     {
+        name: 'Product',
+        show: true,
+        icon: HiCollection,
+        route: route('product.index'),
+        active: 'product.*',
+        permission: 'view-user',
+
+    },
+    {
         name: 'Setting',
         show: true,
         icon: HiChartPie,

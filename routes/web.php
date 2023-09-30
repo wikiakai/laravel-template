@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -32,8 +33,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 
+    // Products
+    Route::resource('/product', ProductController::class);
+
     // Role
     Route::resource('/roles', RoleController::class);
+
 
     // Setting
     Route::get('/settings', [SettingController::class, 'index'])->name('setting.index');
