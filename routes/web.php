@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Products
     Route::resource('/product', ProductController::class);
+    Route::post('/product/{product}', [ProductController::class, 'update'])->name('product.update');
 
     // Role
     Route::resource('/roles', RoleController::class);

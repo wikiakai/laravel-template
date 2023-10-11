@@ -32,15 +32,25 @@ function Form(props) {
     const handleChangeField = (e, field) => {
         let updatedFormValue = formValue;
 
-        const fieldName = field === undefined ? e.target.name : field;
+        // const fieldName = field === undefined ? e.target.name : field;
         const value = field === "image" ? e.target.files[0] : e.target.value;
 
-        updatedFormValue[fieldName] = value;
+        updatedFormValue[field] = value;
 
-        setFormValue(updatedFormValue);
+        setFormValue({ ...updatedFormValue });
     };
 
     const handleSubmit = () => {
+        if (isEmpty(item) === false) {
+            const url = route("product.update", item); // product/id
+            router.post(url, formValue, {
+                onStart: () => setProcessing(true),
+                onFinish: (e) => {
+                    setProcessing(false);
+                },
+            });
+            return;
+        }
         // handle submit new data
         router.post(route("product.store"), formValue, {
             forceFormData: true,
@@ -51,9 +61,6 @@ function Form(props) {
         });
     };
 
-    console.log(formType);
-    console.log(formValue);
-    console.log(formDisabled);
     useEffect(() => {
         if (formType === "show") {
             setFormValue({
@@ -95,7 +102,7 @@ function Form(props) {
                         <FormInput
                             name="name"
                             value={formValue.name}
-                            onChange={(e) => handleChangeField(e)}
+                            onChange={(e) => handleChangeField(e, "name")}
                             label="Nama"
                             error={errors.name}
                             disabled={formDisabled}
@@ -111,7 +118,7 @@ function Form(props) {
                         <FormInputNumeric
                             name="price"
                             value={formValue.price}
-                            onChange={(e) => handleChangeField(e)}
+                            onChange={(e) => handleChangeField(e, "price")}
                             label="Price"
                             error={errors.price}
                             disabled={formDisabled}
@@ -119,18 +126,22 @@ function Form(props) {
                         <TextArea
                             name="description"
                             value={formValue.description}
-                            onChange={(e) => handleChangeField(e)}
+                            onChange={(e) =>
+                                handleChangeField(e, "description")
+                            }
                             label="Description"
                             error={errors.description}
                             disabled={formDisabled}
                         />
-                        {formType === "edit" || formType === "show" ? (
-                            <img
-                                src={`/storage/${formValue.image}`}
-                                className="mb-1 max-h-64 w-full object-contain"
-                                alt="preview"
-                            />
-                        ) : null}
+                        {formType === "edit" || formType === "show"
+                            ? formValue.image && (
+                                  <img
+                                      src={`/storage/${formValue.image}`}
+                                      className="mb-1 max-h-64 w-full object-contain"
+                                      alt="preview"
+                                  />
+                              )
+                            : null}
                         <FormFile
                             label="Gambar"
                             inputRef={inputRef}

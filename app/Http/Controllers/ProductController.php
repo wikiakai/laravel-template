@@ -46,39 +46,31 @@ class ProductController extends Controller
             'image' => 'nullable|image',
         ]);
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
 
         // upload image
-        // if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        // $image->storeAs('public/uploads', $image->hashName('uploads'));
-        $image->store('uploads', 'public');
-        // $event->image = $image->hashName('uploads');
-        // }
-        Product::create([
-            'name' => $request->name,
-            'qty' => $request->qty,
-            'price' => $request->price,
-            'description' => $request->description,
-            'image' => $image->hashName('uploads'),
-        ]);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image->store('uploads', 'public');
 
-        // DB::commit();
+            Product::create([
+                'name' => $request->name,
+                'qty' => $request->qty,
+                'price' => $request->price,
+                'description' => $request->description,
+                'image' => $image->hashName('uploads'),
+            ]);
+        } else {
+            Product::create([
+                'name' => $request->name,
+                'qty' => $request->qty,
+                'price' => $request->price,
+                'description' => $request->description,
+                'image' => ''
+            ]);
+        }
 
-        // $product = Product::make([
-        //     'name' => $request->name,
-        //     'qty' => $request->qty,
-        //     'price' => $request->price,
-        //     'description' => $request->desription,
-        // ]);
-
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     $image->store('uploads', 'public');
-        //     $product->image = $image->hashName('uploads');
-        // }
-
-        // $product->save();
+        DB::commit();
 
         return redirect()->route('product.index')
             ->with('message', ['type' => 'success', 'message' => 'Item has beed saved']);
@@ -87,9 +79,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): Response
+    public function show(Product $product): Response
     {
-        $item = Product::findOrFail($id);
+        $item = $product;
         $formType = 'show';
 
         return inertia('Product/Form', ['item' => $item, 'formType' => $formType]);
@@ -98,7 +90,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         $item = Product::findOrFail($id);
         $formType = 'edit';
@@ -109,16 +101,59 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product): RedirectResponse
     {
-        //
+        info("input", [$request->input()]);
+        $request->validate([
+            'name' => 'string|required|max:255',
+            'qty' => 'integer|required|min:1|max:100',
+            'price' => 'decimal:0|required',
+            'description' => 'string',
+            'image' => 'nullable|image',
+        ]);
+
+        // upload image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image->store('uploads', 'public');
+
+            $product->fill([
+                'name' => $request->name,
+                'qty' => $request->qty,
+                'price' => $request->price,
+                'description' => $request->description,
+                'image' => $image->hashName('uploads'),
+            ]);
+        } else {
+            $product->fill([
+                'name' => $request->name,
+                'qty' => $request->qty,
+                'price' => $request->price,
+                'description' => $request->description,
+                'image' => ''
+            ]);
+        }
+
+        $product->save();
+
+        return redirect()->route('product.index')
+            ->with('message', ['type' => 'success', 'message' => 'Item has been updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
+
+        if ($product->id === null) {
+            return redirect()->route('product.index')
+                ->with('message', ['type' => 'error', 'message' => 'Item default can\'t deleted']);
+        }
+        $deleted = $product->delete();
+        if ($deleted) {
+            return redirect()->route('product.index')
+                ->with('message', ['type' => 'success', 'message' => 'Item has beed deleted']);
+        }
     }
 }

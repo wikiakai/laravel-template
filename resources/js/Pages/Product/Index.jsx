@@ -19,6 +19,19 @@ function Index(props) {
 
     const [search, setSearch] = useState("");
 
+    const confirmModal = useModalState();
+
+    const handleDeleteClick = (itemToDelete) => {
+        confirmModal.setData(itemToDelete);
+        confirmModal.toggle();
+    };
+
+    const onDelete = () => {
+        if (confirmModal.data !== null) {
+            router.delete(route("product.destroy", confirmModal.data.id));
+        }
+    };
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -146,7 +159,7 @@ function Index(props) {
                                                             <Dropdown.Item
                                                                 onClick={() =>
                                                                     handleDeleteClick(
-                                                                        role
+                                                                        product
                                                                     )
                                                                 }
                                                             >
@@ -172,6 +185,7 @@ function Index(props) {
                     </div>
                 </div>
             </div>
+            <ModalConfirm modalState={confirmModal} onConfirm={onDelete} />
         </AuthenticatedLayout>
     );
 }
