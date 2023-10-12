@@ -16,10 +16,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $query = Product::query();
 
+        if ($request->q) {
+            $query->where(
+                'name',
+                'like',
+                "%{$request->q}%"
+            );
+        }
+        $query->orderBy('created_at', 'desc');
         return inertia('Product/Index', ['data' => $query->paginate(10)]);
     }
 
@@ -103,7 +111,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
-        info("input", [$request->input()]);
+
         $request->validate([
             'name' => 'string|required|max:255',
             'qty' => 'integer|required|min:1|max:100',

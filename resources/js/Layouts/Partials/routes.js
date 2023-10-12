@@ -54,6 +54,14 @@ export default [
         ],
     },
     {
+        name: 'Category',
+        show: true,
+        icon: HiDatabase,
+        route: route('category.index'),
+        active:'category.index',
+        permission: 'view-user',
+    },
+    {
         name: 'Product',
         show: true,
         icon: HiCollection,

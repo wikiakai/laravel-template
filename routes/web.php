@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -37,9 +38,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/product', ProductController::class);
     Route::post('/product/{product}', [ProductController::class, 'update'])->name('product.update');
 
+    // Category
+    Route::resource('/category', CategoryController::class);
+
     // Role
     Route::resource('/roles', RoleController::class);
-
 
     // Setting
     Route::get('/settings', [SettingController::class, 'index'])->name('setting.index');

@@ -11,6 +11,7 @@ import Pagination from "@/Components/Pagination";
 import ModalConfirm from "@/Components/ModalConfirm";
 import SearchInput from "@/Components/SearchInput";
 import HasPermission from "@/Components/HasPermission";
+import FormModal from "./FormModal";
 
 function Index(props) {
     const {
@@ -21,6 +22,12 @@ function Index(props) {
     const preValue = usePrevious(search);
 
     const confirmModal = useModalState();
+    const formModal = useModalState();
+
+    const toggleFormModal = (cat = null) => {
+        formModal.setData(cat);
+        formModal.toggle();
+    };
 
     const handleDeleteClick = (itemToDelete) => {
         confirmModal.setData(itemToDelete);
@@ -29,7 +36,7 @@ function Index(props) {
 
     const onDelete = () => {
         if (confirmModal.data !== null) {
-            router.delete(route("product.destroy", confirmModal.data.id));
+            router.delete(route("category.destroy", confirmModal.data.id));
         }
     };
     const keyWord = { q: search };
@@ -47,17 +54,20 @@ function Index(props) {
             auth={props.auth}
             flash={props.flash}
             page={"System"}
-            action={"Product"}
+            action={"Category"}
         >
-            <Head title="Product" />
+            <Head title="Category" />
             <div>
                 <div className="mx-auto sm:px-6 lg:px-8 ">
                     <div className="p-6 overflow-hidden shadow-sm sm:rounded-lg bg-gray-200 dark:bg-gray-800 space-y-4">
                         <div className="flex justify-between">
                             <HasPermission p="create-role">
-                                <Link href={route("product.create")}>
-                                    <Button size="sm">Tambah</Button>
-                                </Link>
+                                <Button
+                                    size="sm"
+                                    onClick={() => toggleFormModal()}
+                                >
+                                    Tambah
+                                </Button>
                             </HasPermission>
 
                             <div className="flex items-center">
@@ -81,45 +91,22 @@ function Index(props) {
                                             <th
                                                 scope="col"
                                                 className="py-3 px-6"
-                                            >
-                                                Qty
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="py-3 px-6"
-                                            >
-                                                Price
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="py-3 px-6"
                                             />
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {data.map((product) => (
+                                        {data.map((cat) => (
                                             <tr
                                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                key={product.id}
+                                                key={cat.id}
                                             >
                                                 <td
                                                     scope="row"
                                                     className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                 >
-                                                    {product.name}
+                                                    {cat.name}
                                                 </td>
-                                                <td
-                                                    scope="row"
-                                                    className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                >
-                                                    {product.qty}
-                                                </td>
-                                                <td
-                                                    scope="row"
-                                                    className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                                >
-                                                    {product.price}
-                                                </td>
+
                                                 <td className="py-4 px-6 flex justify-end">
                                                     <Dropdown
                                                         label={"Opsi"}
@@ -130,30 +117,8 @@ function Index(props) {
                                                         <HasPermission p="update-role">
                                                             <Dropdown.Item
                                                                 onClick={() =>
-                                                                    router.visit(
-                                                                        route(
-                                                                            "product.show",
-                                                                            product.id
-                                                                        )
-                                                                    )
-                                                                }
-                                                            >
-                                                                <div className="flex space-x-1 items-center">
-                                                                    <HiPencil />
-                                                                    <div>
-                                                                        Detail
-                                                                    </div>
-                                                                </div>
-                                                            </Dropdown.Item>
-                                                        </HasPermission>
-                                                        <HasPermission p="update-role">
-                                                            <Dropdown.Item
-                                                                onClick={() =>
-                                                                    router.visit(
-                                                                        route(
-                                                                            "product.edit",
-                                                                            product.id
-                                                                        )
+                                                                    toggleFormModal(
+                                                                        cat
                                                                     )
                                                                 }
                                                             >
@@ -169,7 +134,7 @@ function Index(props) {
                                                             <Dropdown.Item
                                                                 onClick={() =>
                                                                     handleDeleteClick(
-                                                                        product
+                                                                        cat
                                                                     )
                                                                 }
                                                             >
@@ -195,6 +160,7 @@ function Index(props) {
                     </div>
                 </div>
             </div>
+            <FormModal modalState={formModal} />
             <ModalConfirm modalState={confirmModal} onConfirm={onDelete} />
         </AuthenticatedLayout>
     );
