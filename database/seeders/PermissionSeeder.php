@@ -31,6 +31,16 @@ class PermissionSeeder extends Seeder
             ['id' => Str::ulid(), 'label' => 'View Role', 'name' => 'view-role'],
             ['id' => Str::ulid(), 'label' => 'Delete Role', 'name' => 'delete-role'],
 
+            ['id' => Str::ulid(), 'label' => 'Create Category', 'name' => 'create-category'],
+            ['id' => Str::ulid(), 'label' => 'Update Category', 'name' => 'update-category'],
+            ['id' => Str::ulid(), 'label' => 'View Category', 'name' => 'view-category'],
+            ['id' => Str::ulid(), 'label' => 'Delete Category', 'name' => 'delete-category'],
+
+            ['id' => Str::ulid(), 'label' => 'Create Product', 'name' => 'create-product'],
+            ['id' => Str::ulid(), 'label' => 'Update Product', 'name' => 'update-product'],
+            ['id' => Str::ulid(), 'label' => 'View Product', 'name' => 'view-product'],
+            ['id' => Str::ulid(), 'label' => 'Delete Product', 'name' => 'delete-product'],
+
             ['id' => Str::ulid(), 'label' => 'View Setting', 'name' => 'view-setting'],
         ];
 

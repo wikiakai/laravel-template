@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Permission;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
@@ -37,8 +38,9 @@ class ProductController extends Controller
     public function create(): Response
     {
         $formType = 'create';
+        $categories = Category::all();
 
-        return inertia('Product/Form', ['formType' => $formType]);
+        return inertia('Product/Form', ['formType' => $formType, 'categories' => $categories]);
     }
 
     /**
@@ -50,7 +52,10 @@ class ProductController extends Controller
             'name' => 'string|required|max:255',
             'qty' => 'integer|required|min:1|max:100',
             'price' => 'decimal:0|required',
+            'cost' => 'decimal:0|required',
+            'category_id' => 'string',
             'description' => 'string',
+            'status' => 'string|required',
             'image' => 'nullable|image',
         ]);
 
@@ -63,17 +68,25 @@ class ProductController extends Controller
 
             Product::create([
                 'name' => $request->name,
+                'code' => 'I-' . Product::count() + 1,
                 'qty' => $request->qty,
                 'price' => $request->price,
+                'cost' => $request->cost,
+                'category_id' => $request->category_id,
                 'description' => $request->description,
+                'status' => $request->status,
                 'image' => $image->hashName('uploads'),
             ]);
         } else {
             Product::create([
                 'name' => $request->name,
+                'code' => 'I-' . Product::count() + 1,
                 'qty' => $request->qty,
                 'price' => $request->price,
+                'cost' => $request->cost,
+                'category_id' => $request->category_id,
                 'description' => $request->description,
+                'status' => $request->status,
                 'image' => ''
             ]);
         }
@@ -91,8 +104,9 @@ class ProductController extends Controller
     {
         $item = $product;
         $formType = 'show';
+        $categories = Category::all();
 
-        return inertia('Product/Form', ['item' => $item, 'formType' => $formType]);
+        return inertia('Product/Form', ['item' => $item, 'formType' => $formType, 'categories' => $categories]);
     }
 
     /**
@@ -102,8 +116,9 @@ class ProductController extends Controller
     {
         $item = Product::findOrFail($id);
         $formType = 'edit';
+        $categories = Category::all();
 
-        return inertia('Product/Form', ['item' => $item, 'formType' => $formType]);
+        return inertia('Product/Form', ['item' => $item, 'formType' => $formType, 'categories' => $categories]);
     }
 
     /**
@@ -116,7 +131,10 @@ class ProductController extends Controller
             'name' => 'string|required|max:255',
             'qty' => 'integer|required|min:1|max:100',
             'price' => 'decimal:0|required',
+            'cost' => 'decimal:0|required',
+            'category_id' => 'string',
             'description' => 'string',
+            'status' => 'string|required',
             'image' => 'nullable|image',
         ]);
 
@@ -127,17 +145,25 @@ class ProductController extends Controller
 
             $product->fill([
                 'name' => $request->name,
+                // 'code' => $product->code,
                 'qty' => $request->qty,
                 'price' => $request->price,
+                'cost' => $request->cost,
+                'category_id' => $request->category_id,
                 'description' => $request->description,
+                'status' => $request->status,
                 'image' => $image->hashName('uploads'),
             ]);
         } else {
             $product->fill([
                 'name' => $request->name,
+                // 'code' => $product->code,
                 'qty' => $request->qty,
                 'price' => $request->price,
+                'cost' => $request->cost,
+                'category_id' => $request->category_id,
                 'description' => $request->description,
+                'status' => $request->status,
                 'image' => ''
             ]);
         }

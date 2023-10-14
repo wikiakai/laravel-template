@@ -6,16 +6,18 @@ import FormInput from "@/Components/FormInput";
 import FormInputNumeric from "@/Components/FormInputNumeric";
 import FormFile from "@/Components/FormFile";
 import TextArea from "@/Components/TextArea";
+import SelectInput from "@/Components/SelectInput";
+
 import Button from "@/Components/Button";
 import { isEmpty } from "lodash";
-import Checkbox from "@/Components/Checkbox";
+
 import { router } from "@inertiajs/react";
 
 function Form(props) {
     const {
         props: { errors },
     } = usePage();
-    const { item, formType } = props;
+    const { item, formType, categories } = props;
     const inputRef = useRef();
     const [processing, setProcessing] = useState(false);
 
@@ -23,7 +25,10 @@ function Form(props) {
         name: null,
         qty: null,
         price: null,
+        cost: null,
+        category_id: null,
         description: null,
+        status: null,
         image: null,
         image_url: "",
     });
@@ -41,6 +46,7 @@ function Form(props) {
     };
 
     const handleSubmit = () => {
+        console.log(item);
         if (isEmpty(item) === false) {
             const url = route("product.update", item); // product/id
             router.post(url, formValue, {
@@ -67,7 +73,10 @@ function Form(props) {
                 name: item.name,
                 qty: item.qty,
                 price: item.price,
+                cost: item.cost,
+                category_id: item.category_id,
                 description: item.description,
+                status: item.status,
                 image: item.image,
                 image_url: "",
             });
@@ -80,7 +89,10 @@ function Form(props) {
                 name: item.name,
                 qty: item.qty,
                 price: item.price,
+                cost: item.cost,
+                category_id: item.category_id,
                 description: item.description,
+                status: item.status,
                 image: item.image,
                 image_url: "",
             });
@@ -123,6 +135,42 @@ function Form(props) {
                             error={errors.price}
                             disabled={formDisabled}
                         />
+                        <FormInputNumeric
+                            name="cost"
+                            value={formValue.cost}
+                            onChange={(e) => handleChangeField(e, "cost")}
+                            label="Cost"
+                            error={errors.cost}
+                            disabled={formDisabled}
+                        />
+                        <SelectInput
+                            name="category"
+                            value={formValue.category_id}
+                            label="Category"
+                            error={errors.category_id}
+                            disabled={formDisabled}
+                            onChange={(e) =>
+                                handleChangeField(e, "category_id")
+                            }
+                        >
+                            <option value="">Select</option>
+                            {categories?.map((cat) => (
+                                <option value={cat.id}>{cat.name}</option>
+                            ))}
+                        </SelectInput>
+                        <SelectInput
+                            name="status"
+                            value={formValue.status}
+                            label="Status"
+                            error={errors.status}
+                            disabled={formDisabled}
+                            onChange={(e) => handleChangeField(e, "status")}
+                        >
+                            <option value="">Select</option>
+                            <option value="ready">Ready</option>
+                            <option value="out_of_stock">Out of Stock</option>
+                            <option value="on_ordered">On Ordered</option>
+                        </SelectInput>
                         <TextArea
                             name="description"
                             value={formValue.description}
@@ -165,7 +213,7 @@ function Form(props) {
                                 </Button>
                             )}
 
-                            <Link href={route("roles.index")}>
+                            <Link href={route("product.index")}>
                                 <Button type="secondary">Kembali</Button>
                             </Link>
                         </div>

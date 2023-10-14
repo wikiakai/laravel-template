@@ -11,6 +11,8 @@ import Pagination from "@/Components/Pagination";
 import ModalConfirm from "@/Components/ModalConfirm";
 import SearchInput from "@/Components/SearchInput";
 import HasPermission from "@/Components/HasPermission";
+import { formatIDR } from "@/utils";
+import Chip from "@/Components/Chip";
 
 function Index(props) {
     const {
@@ -76,6 +78,12 @@ function Index(props) {
                                                 scope="col"
                                                 className="py-3 px-6"
                                             >
+                                                Code
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="py-3 px-6"
+                                            >
                                                 Name
                                             </th>
                                             <th
@@ -93,6 +101,18 @@ function Index(props) {
                                             <th
                                                 scope="col"
                                                 className="py-3 px-6"
+                                            >
+                                                Cost
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="py-3 px-6"
+                                            >
+                                                Status
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="py-3 px-6"
                                             />
                                         </tr>
                                     </thead>
@@ -102,6 +122,12 @@ function Index(props) {
                                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                                                 key={product.id}
                                             >
+                                                <td
+                                                    scope="row"
+                                                    className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap dark:text-white"
+                                                >
+                                                    {product.code}
+                                                </td>
                                                 <td
                                                     scope="row"
                                                     className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -118,7 +144,21 @@ function Index(props) {
                                                     scope="row"
                                                     className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                                 >
-                                                    {product.price}
+                                                    {formatIDR(product.price)}
+                                                </td>
+                                                <td
+                                                    scope="row"
+                                                    className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                >
+                                                    {formatIDR(product.cost)}
+                                                </td>
+                                                <td
+                                                    scope="row"
+                                                    className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                >
+                                                    <Chip
+                                                        val={product.status}
+                                                    />
                                                 </td>
                                                 <td className="py-4 px-6 flex justify-end">
                                                     <Dropdown

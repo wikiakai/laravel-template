@@ -1,21 +1,22 @@
-import React from 'react'
+import React from "react";
 
-export const Option = ({ value, children }) => {
-    return <option value={value}>{children}</option>
-}
+const Option = ({ value, children }) => {
+    return <option value={value}>{children}</option>;
+};
 
-export const Select = ({
-    label = '',
+const SelectInput = ({
+    label = "",
     value,
     onChange = () => {},
-    defaultValue = '',
+    defaultValue = "",
     error,
     name,
+    disabled,
     children,
 }) => {
     return (
         <>
-            {label !== '' && (
+            {label !== "" && (
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     {label}
                 </label>
@@ -23,12 +24,13 @@ export const Select = ({
             <select
                 className={`mb-2 bg-gray-50 border  text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white ${
                     error
-                        ? 'border-red-500 dark:border-red-500 focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500'
-                        : 'border-gray-300 dark:border-gray-600 focus:ring-cyan-500 focus:border-cyan-500 dark:focus:ring-cyan-500 dark:focus:border-cyan-500'
+                        ? "border-red-500 dark:border-red-500 focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-500 dark:focus:border-red-500"
+                        : "border-gray-300 dark:border-gray-600 focus:ring-cyan-500 focus:border-cyan-500 dark:focus:ring-cyan-500 dark:focus:border-cyan-500"
                 }`}
                 name={name}
                 onChange={onChange}
                 value={value}
+                disabled={disabled}
             >
                 {children}
             </select>
@@ -38,5 +40,7 @@ export const Select = ({
                 </p>
             )}
         </>
-    )
-}
+    );
+};
+
+export default SelectInput;

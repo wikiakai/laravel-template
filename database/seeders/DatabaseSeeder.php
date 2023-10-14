@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             DummySeeder::class,
+            ProductSeeder::class,
+            CategorySeeder::class
         ]);
     }
 }
